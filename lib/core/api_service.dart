@@ -13,20 +13,28 @@
 //   ) async {
 //     final url = Uri.parse("$baseUrl/register");
 
+//     print("=========== REGISTER API ===========");
+//     print("URL => $url");
+
+//     final bodyData = {"username": username, "password": password, "role": role};
+
+//     print("REQUEST BODY => ${jsonEncode(bodyData)}");
+
 //     final response = await http.post(
 //       url,
 //       headers: {"Content-Type": "application/json"},
-//       body: jsonEncode({
-//         "username": username,
-//         "password": password,
-//         "role": role,
-//       }),
+//       body: jsonEncode(bodyData),
 //     );
+
+//     print("STATUS CODE => ${response.statusCode}");
+//     print("RESPONSE BODY => ${response.body}");
 
 //     if (response.statusCode == 200) {
 //       return jsonDecode(response.body);
 //     } else {
-//       throw Exception("Register Failed");
+//       throw Exception(
+//         "Register Failed => ${response.statusCode} ${response.body}",
+//       );
 //     }
 //   }
 
@@ -37,16 +45,28 @@
 //   ) async {
 //     final url = Uri.parse("$baseUrl/login");
 
+//     print("=========== LOGIN API ===========");
+//     print("URL => $url");
+
+//     final bodyData = {"username": username, "password": password};
+
+//     print("REQUEST BODY => ${jsonEncode(bodyData)}");
+
 //     final response = await http.post(
 //       url,
 //       headers: {"Content-Type": "application/json"},
-//       body: jsonEncode({"username": username, "password": password}),
+//       body: jsonEncode(bodyData),
 //     );
+
+//     print("STATUS CODE => ${response.statusCode}");
+//     print("RESPONSE BODY => ${response.body}");
 
 //     if (response.statusCode == 200) {
 //       return jsonDecode(response.body);
 //     } else {
-//       throw Exception("Login Failed");
+//       throw Exception(
+//         "Login Failed => ${response.statusCode} ${response.body}",
+//       );
 //     }
 //   }
 
@@ -56,12 +76,18 @@
 
 //     final url = Uri.parse("$baseUrl/$version/population");
 
+//     print("=========== POPULATION API ===========");
+//     print("URL => $url");
+
 //     final response = await http.get(url);
+
+//     print("STATUS CODE => ${response.statusCode}");
+//     print("RESPONSE BODY => ${response.body}");
 
 //     if (response.statusCode == 200) {
 //       return jsonDecode(response.body);
 //     } else {
-//       throw Exception("Failed to load data");
+//       throw Exception("Failed to load data => ${response.statusCode}");
 //     }
 //   }
 
@@ -78,7 +104,9 @@ import '../core/constants.dart';
 class ApiService {
   static const String baseUrl = AppConstants.baseUrl;
 
+  // =========================
   // 🔐 REGISTER API
+  // =========================
   static Future<Map<String, dynamic>> register(
     String username,
     String password,
@@ -111,7 +139,9 @@ class ApiService {
     }
   }
 
+  // =========================
   // 🔐 LOGIN API
+  // =========================
   static Future<Map<String, dynamic>> login(
     String username,
     String password,
@@ -143,16 +173,30 @@ class ApiService {
     }
   }
 
+  // =========================
   // 📊 POPULATION API
-  static Future<Map<String, dynamic>> fetchPopulation(String role) async {
+  // =========================
+  static Future<Map<String, dynamic>> fetchPopulation(
+    String role,
+    String token,
+  ) async {
     String version = getVersion(role);
 
     final url = Uri.parse("$baseUrl/$version/population");
 
     print("=========== POPULATION API ===========");
+    print("ROLE => $role");
+    print("VERSION => $version");
+    print("TOKEN => $token");
     print("URL => $url");
 
-    final response = await http.get(url);
+    final response = await http.get(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
 
     print("STATUS CODE => ${response.statusCode}");
     print("RESPONSE BODY => ${response.body}");
@@ -160,13 +204,24 @@ class ApiService {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception("Failed to load data => ${response.statusCode}");
+      throw Exception(
+        "Failed to load data => ${response.statusCode} ${response.body}",
+      );
     }
   }
 
+  // =========================
+  // VERSION LOGIC
+  // =========================
   static String getVersion(String role) {
-    if (role == "free") return "v1";
-    if (role == "premium") return "v2";
+    if (role == "free") {
+      return "v1";
+    }
+
+    if (role == "premium") {
+      return "v2";
+    }
+
     return "v3";
   }
 }
