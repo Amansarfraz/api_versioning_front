@@ -1,25 +1,28 @@
 // import '../models/user_model.dart';
+// //import '../core/constants.dart';
 
 // class AuthService {
-//   static User login(String username, String role) {
-//     int credits = 0;
-
-//     if (role == "free") credits = 5;
-//     if (role == "premium") credits = 20;
-//     if (role == "admin") credits = 999;
-
-//     return User(username: username, role: role, credits: credits);
+//   static User createLocalUser(Map<String, dynamic> data) {
+//     return User(
+//       username: data["username"],
+//       role: data["role"],
+//       credits: data["credits"],
+//     );
 //   }
 // }
 import '../models/user_model.dart';
-//import '../core/constants.dart';
 
 class AuthService {
-  static User createLocalUser(Map<String, dynamic> data) {
+  static User createLocalUser(Map<String, dynamic> response) {
     return User(
-      username: data["username"],
-      role: data["role"],
-      credits: data["credits"],
+      username: response["username"] ?? "",
+      role: response["role"] ?? "free",
+      token: response["access_token"] ?? "",
+      credits: response["role"] == "premium"
+          ? 999
+          : response["role"] == "admin"
+          ? 9999
+          : 5,
     );
   }
 }
