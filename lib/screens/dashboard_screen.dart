@@ -520,9 +520,43 @@ class _DashboardScreenState extends State<DashboardScreen>
 
                           const SizedBox(height: 20),
 
-                          Text(
-                            data.toString(),
-                            style: const TextStyle(fontSize: 15, height: 1.6),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Version : ${data["version"]}"),
+                              const SizedBox(height: 5),
+
+                              Text("Access : ${data["access"]}"),
+                              const SizedBox(height: 5),
+
+                              Text("Country : ${data["country"]}"),
+                              const SizedBox(height: 5),
+
+                              Text("Population : ${data["population"]}"),
+                              const SizedBox(height: 5),
+
+                              Text("User : ${data["user"]}"),
+                              const SizedBox(height: 15),
+
+                              const Text(
+                                "Provinces:",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+
+                              const SizedBox(height: 8),
+
+                              ...(data["provinces"] as List).map((p) {
+                                // agar list string ho
+                                if (p is String) {
+                                  return Text("• $p");
+                                }
+
+                                // agar object ho (v3 case)
+                                return Text(
+                                  "• ${p["name"]} → ${p["cities"].join(", ")}",
+                                );
+                              }).toList(),
+                            ],
                           ),
                         ],
                       ),
