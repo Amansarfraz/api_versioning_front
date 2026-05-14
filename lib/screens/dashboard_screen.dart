@@ -336,6 +336,16 @@ class _DashboardScreenState extends State<DashboardScreen>
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const LoginScreen()),
+              (route) => false,
+            );
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
