@@ -552,7 +552,17 @@ class _DashboardScreenState extends State<DashboardScreen>
                                 "Provinces:",
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
+                              const SizedBox(height: 10),
+                              Text(
+                                "Growth Rate : ${data?["growth_rate"] ?? "-"}",
+                              ),
+                              const SizedBox(height: 5),
 
+                              Text(
+                                "Literacy Rate : ${data?["literacy_rate"] ?? "-"}",
+                              ),
+
+                              //const SizedBox(height: 10),
                               const SizedBox(height: 8),
 
                               ...(data["provinces"] as List).map((p) {
